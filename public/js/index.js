@@ -27,7 +27,7 @@ const startVideo = () => {
 }
 
 const loadLabels = () => {
-    const labels = ['Tra Nguyen']
+    const labels = ['Tra Nguyen', 'Huu Nhan', 'Tuyen Le']
     return Promise.all(labels.map(async label => {
         const descriptions = []
         for (let i = 1; i <= 5; i++) {
@@ -37,6 +37,7 @@ const loadLabels = () => {
                 .withFaceLandmarks()
                 .withFaceDescriptor()
             descriptions.push(detections.descriptor)
+            console.log(`/labels/${label}/${i}.jpg`)
         }
         return new faceapi.LabeledFaceDescriptors(label, descriptions)
     }))
