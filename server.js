@@ -16,8 +16,7 @@ app.use(express.static(path.join(__dirname, '../../weights')))
 app.use(express.static(path.join(__dirname, '../../dist')))
 
 
-app.get('/', (req, res) => res.redirect('/webcam_face_expression_recognition'))
-app.get('/webcam_face_expression_recognition', (req, res) => res.sendFile(path.join(viewsDir, 'webcamFaceExpressionRecognition.html')))
+app.get('/', (req, res) => res.redirect('/index'))
 app.get('/index', (req, res) => res.sendFile(path.join(viewsDir, 'index.html')))
 
 const PORT = process.env.PORT || 3000;

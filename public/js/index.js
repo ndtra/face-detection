@@ -37,7 +37,7 @@ const loadLabels = () => {
                 .withFaceLandmarks()
                 .withFaceDescriptor()
             descriptions.push(detections.descriptor)
-            console.log(`/labels/${label}/${i}.jpg`)
+            //console.log(`/labels/${label}/${i}.jpg`)
         }
         return new faceapi.LabeledFaceDescriptors(label, descriptions)
     }))
