@@ -27,7 +27,7 @@ const startVideo = () => {
 }
 
 const loadLabels = () => {
-    const labels = ['Tra Nguyen', 'Huu Nhan', 'Tuyen Le']
+    const labels = ['Tra Nguyen', 'Linh', 'Huu Nhan', 'Tuyen Le']
     return Promise.all(labels.map(async label => {
         const descriptions = []
         for (let i = 1; i <= 5; i++) {
