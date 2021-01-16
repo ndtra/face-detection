@@ -20,8 +20,8 @@ app.get('/', (req, res) => res.redirect('/webcam_face_expression_recognition'))
 app.get('/webcam_face_expression_recognition', (req, res) => res.sendFile(path.join(viewsDir, 'webcamFaceExpressionRecognition.html')))
 app.get('/index', (req, res) => res.sendFile(path.join(viewsDir, 'index.html')))
 
-
-app.listen(3000, () => console.log('Listening on port 3000!'))
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))
 
 function request(url, returnBuffer = true, timeout = 10000) {
   return new Promise(function(resolve, reject) {
