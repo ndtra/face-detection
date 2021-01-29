@@ -1,8 +1,11 @@
 const express = require('express')
 const path = require('path')
 const { get } = require('request')
+var cors = require('cors')
 
 const app = express()
+app.use(cors())
+var testCtrl = require("./controller/testController");
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -10,6 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 const viewsDir = path.join(__dirname, 'views')
 app.use(express.static(viewsDir))
 app.use(express.static(path.join(__dirname, './public')))
+app.use(express.static(path.join(__dirname, './upload')))
 app.use(express.static(path.join(__dirname, '../images')))
 app.use(express.static(path.join(__dirname, '../media')))
 app.use(express.static(path.join(__dirname, '../../weights')))
@@ -18,6 +22,11 @@ app.use(express.static(path.join(__dirname, '../../dist')))
 
 app.get('/', (req, res) => res.redirect('/index'))
 app.get('/index', (req, res) => res.sendFile(path.join(viewsDir, 'index.html')))
+app.get('/upload', (req, res) => res.sendFile(path.join(viewsDir, 'upload.html')))
+app.get('/traindata', (req, res) => res.sendFile(path.join(viewsDir, 'train.html')))
+
+
+app.use("/", testCtrl);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))

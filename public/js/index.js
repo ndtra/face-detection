@@ -1,5 +1,5 @@
 const cam = document.getElementById('video')
-
+let abc;
 const startVideo = () => {
     // navigator.mediaDevices.enumerateDevices()
     // .then(devices => {
@@ -25,21 +25,33 @@ const startVideo = () => {
         err => console.error(err)
       )
 }
-
-const loadLabels = () => {
-    const labels = ['Tra Nguyen', 'Linh', 'Huu Nhan', 'Tuyen Le']
-    return Promise.all(labels.map(async label => {
-        const descriptions = []
-        for (let i = 1; i <= 5; i++) {
-            const img = await faceapi.fetchImage(`/js/labels/${label}/${i}.jpg`)
-            const detections = await faceapi
-                .detectSingleFace(img)
-                .withFaceLandmarks()
-                .withFaceDescriptor()
-            descriptions.push(detections.descriptor)
-            //console.log(`/labels/${label}/${i}.jpg`)
+let result=[];
+let labelAll=[];
+let labels;
+const loadLabels = async () => {
+    
+    $.ajax({
+        url: 'http://localhost:3000/test',
+        type: 'GET',
+        dataType: 'json'
+    }).done(function(res) {
+        let fulllabel = [];
+        let descriptions = [];
+        for(i=0; i<res.length; i++){
+            fulllabel.push(res[i].employee_name);
+            descriptions.push(new Float32Array(JSON.parse("["+res[i].descriptions+"]")));
+            if((i+1)%5==0){
+                result.push(descriptions);
+                descriptions = [];
+            }
         }
-        return new faceapi.LabeledFaceDescriptors(label, descriptions)
+        labelAll = [...new Set(fulllabel)];
+    });                
+}
+
+const loadAll = ()=>{
+    return Promise.all(labelAll.map(async (label, index) => {
+        return new faceapi.LabeledFaceDescriptors(label, result[index])
     }))
 }
 
@@ -50,6 +62,7 @@ Promise.all([
     faceapi.nets.faceExpressionNet.loadFromUri('/models'),
     faceapi.nets.ageGenderNet.loadFromUri('/models'),
     faceapi.nets.ssdMobilenetv1.loadFromUri('/models'),
+    labels = loadAll(),
 ]).then(startVideo)
 
 cam.addEventListener('play', async () => {
@@ -58,7 +71,10 @@ cam.addEventListener('play', async () => {
         width: cam.width,
         height: cam.height
     }
-    const labels = await loadLabels()
+    const x = await loadLabels()
+    labels = await loadAll()
+    abc = labels;
+    console.log(labels);
     faceapi.matchDimensions(canvas, canvasSize)
     document.body.appendChild(canvas)
     setInterval(async () => {
@@ -71,6 +87,9 @@ cam.addEventListener('play', async () => {
             .withFaceExpressions()
             //.withAgeAndGender()
             .withFaceDescriptors()
+            //.descriptor
+            //console.log("detections");
+            //console.log(detections.descriptor);
         const resizedDetections = faceapi.resizeResults(detections, canvasSize)
         const faceMatcher = new faceapi.FaceMatcher(labels, 0.6)
         const results = resizedDetections.map(d =>
