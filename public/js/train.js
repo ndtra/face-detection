@@ -15,28 +15,28 @@ var getUrlParameter = function getUrlParameter(sParam) {
 const loadLabels = () => {
     const labels = getUrlParameter("name");
     console.log(labels);
-    // labels.map(async label => {
-    //     for (let i = 1; i <= 10; i++) {
-    //         const img = await faceapi.fetchImage(`/js/labels/${label}/${i}.jpg`)
-    //         const detections = await faceapi
-    //             .detectSingleFace(img)
-    //             .withFaceLandmarks()
-    //             .withFaceDescriptor()
-    //         $.ajax({
-    //             url: 'http://localhost:3000/train',
-    //             type: 'POST',
-    //             dataType: 'html',
-    //             data: {
-    //                 name: label,
-    //                 descriptions: detections.descriptor
-    //             }
-    //         }).done(function() {
-    //             console.log("a");
-    //         });
+    labels.map(async label => {
+        for (let i = 1; i <= 10; i++) {
+            const img = await faceapi.fetchImage(`/js/labels/${label}/${i}.jpg`)
+            const detections = await faceapi
+                .detectSingleFace(img)
+                .withFaceLandmarks()
+                .withFaceDescriptor()
+            $.ajax({
+                url: 'http://localhost:3000/train',
+                type: 'POST',
+                dataType: 'html',
+                data: {
+                    name: label,
+                    descriptions: detections.descriptor
+                }
+            }).done(function() {
+                console.log("a");
+            });
             
-    //     }
-    //     console.log(descriptions);
-    // });
+        }
+        console.log(descriptions);
+    });
 }
 
 Promise.all([
