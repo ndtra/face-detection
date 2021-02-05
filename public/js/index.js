@@ -109,6 +109,20 @@ cam.addEventListener('play', async () => {
         results.forEach((result, index) => {
             const box = resizedDetections[index].detection.box
             const { label, distance } = result
+            if(label!='unknown'){
+                $.ajax({
+                    url: 'http://localhost:3000/checkin',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {
+                        employeeId : 1,
+                        employeeName: label
+                    }
+
+                }).done(function() {
+                    console.log("a");
+                });
+            }
             new faceapi.draw.DrawTextField([
                 `${label} (${parseInt(distance * 100, 10)})`
             ], box.bottomRight).draw(canvas)
