@@ -10,3 +10,5 @@ http://localhost:3000/upload
 http://localhost:3000/traindata?name=<name>
 3. kết quả
 http://localhost:3000/index
+4. query chấm công:
+http://localhost:3000/query-data-checkin
